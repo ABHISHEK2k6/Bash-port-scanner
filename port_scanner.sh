@@ -1,23 +1,23 @@
 #!/bin/bash
 
-# Basic Port Scanning Tool in Bash
+# Port scanner script using nc (Netcat)
 
+# Check if the correct number of arguments is provided
 if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <hostname or IP> <start_port> <end_port>"
-    exit 1
+  echo "Usage: $0 <IP_ADDRESS> <START_PORT> <END_PORT>"
+  exit 1
 fi
 
-host=$1
-start_port=$2
-end_port=$3
+IP_ADDRESS=$1
+START_PORT=$2
+END_PORT=$3
 
-echo "Starting port scan on $host from port $start_port to $end_port..."
+echo "Scanning ports from $START_PORT to $END_PORT on $IP_ADDRESS..."
 
-for ((port=$start_port; port<=$end_port; port++))
-do
-    (echo >/dev/tcp/$host/$port) &>/dev/null && echo "Port $port is open"
+for (( port=$START_PORT; port<=$END_PORT; port++ )); do
+  # Use nc to check if the port is open
+  nc -z -v -w 1 $IP_ADDRESS $port 2>&1 | grep -q 'succeeded' && \
+  echo "Port $port is open"
 done
 
-echo "Port scan completed."
-
-# Usage: ./port_scanner.sh <hostname or IP> <start_port> <end_port>
+echo "Scan complete."
