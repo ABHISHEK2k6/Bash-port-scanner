@@ -16,7 +16,8 @@ end_port=100
 echo "Scanning ports on $ip..."
 
 
-for port in $(seq $start_port $end_port); do
+for port in $(seq $start_port $end_port);
+do
 
   nc -z -w1 $ip $port 2>/dev/null
   if [ $? -eq 0 ]; then
